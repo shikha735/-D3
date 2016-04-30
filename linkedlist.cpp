@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <stack>
 using namespace std;
 
 // Node declaration
@@ -144,6 +145,26 @@ void reverseRecursive(Node *temp){
     temp->next = NULL;
 }
 
+// reverse list using a stack
+void reverseStack(){
+    if(head == NULL) return;
+    stack<Node*> S;
+    Node *temp = head;
+    while(temp!=NULL){
+        S.push(temp);
+        temp = temp->next;
+    }
+    temp = S.top();
+    head = temp;
+    S.pop();
+    while(!S.empty()){
+        temp->next = S.top();
+        S.pop();
+        temp = temp->next;
+    }
+    temp->next=NULL;
+}
+
 // main function
 int main(){
 
@@ -153,7 +174,7 @@ int main(){
     do{
         cout << "\nMenu:" << endl;
         cout << "\n1. InsertBegin \n2. InsertEnd \n3. Insert at nth position \n4. DeleteBegin \n5. DeleteEnd \n6. Delete from nth position \n7. Display \n8. Exit";
-        cout << " \n9. Reverse Iterative \n10. Reverse Recursive \n11. Display in reverse order \nEnter option: ";
+        cout << " \n9. Reverse Iterative \n10. Reverse Recursive \n11. Display in reverse order \n12. Reverse using stack \nEnter option: ";
         cin >> option;
         switch(option){
         case 1: cout << "Enter the value to insert: ";
@@ -219,7 +240,8 @@ int main(){
                  cout << "Elements in the linked list are: " << endl;
                  displayReverse(head);
                  break;
-
+        case 12: reverseStack();
+                 break;
         default: cout << "Enter valid option" << endl;
         }
     }while(1);
