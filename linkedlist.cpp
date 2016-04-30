@@ -212,7 +212,12 @@ int main(){
         case 10: reverseRecursive(head);
                  break;
 
-        case 11: displayReverse(head);
+        case 11: if(head == NULL){
+                    cout << "Linked List empty!!";
+                    break;
+                 }
+                 cout << "Elements in the linked list are: " << endl;
+                 displayReverse(head);
                  break;
 
         default: cout << "Enter valid option" << endl;
