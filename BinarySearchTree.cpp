@@ -71,13 +71,19 @@ void postorder(BstNode* root){
     }
 }
 
+int findHeight(BstNode* root){
+    if(root == NULL)
+        return -1;
+    return max(findHeight(root->left),findHeight(root->right)) + 1;
+}
+
 int main(){
     BstNode* root = NULL;
     int val, option;
 
     do{
         cout << "\nMenu:" << endl;
-        cout << "1. Insert \n2. Search \n3. Preorder Traversal \n4. Inorder Traversal \n5. Postorder Traversal \n6. Exit \nEnter option: " << endl;
+        cout << "1. Insert \n2. Search \n3. Preorder Traversal \n4. Inorder Traversal \n5. Postorder Traversal \n6. Height \n7. Exit \nEnter option: " << endl;
         cin >> option;
 
         switch(option){
@@ -104,7 +110,10 @@ int main(){
             case 5: postorder(root);
                     break;
 
-            case 6: exit(0);
+            case 6: cout << "Height of the BST is: " << findHeight(root);
+                    break;
+
+            case 7: exit(0);
         }
     }while(1);
     return 0;
