@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <queue>
 
 using namespace std;
 
@@ -40,6 +41,20 @@ bool searchTree(BstNode* root, int val){
         return searchTree(root->left, val);
     else
         return searchTree(root->right, val);
+}
+
+// BFS
+void levelOrder(BstNode *root){
+	if(root == NULL) return;
+	queue<BstNode*> Q;
+	Q.push(root);
+	while(!Q.empty()){
+        BstNode* current = Q.front();
+        cout << current->data << '\t';
+        if(current->left != NULL) Q.push(current->left);
+        if(current->right != NULL) Q.push(current->right);
+        Q.pop();
+	}
 }
 
 // Preorder traversal is used to create a copy of the tree.
@@ -83,7 +98,7 @@ int main(){
 
     do{
         cout << "\nMenu:" << endl;
-        cout << "1. Insert \n2. Search \n3. Preorder Traversal \n4. Inorder Traversal \n5. Postorder Traversal \n6. Height \n7. Exit \nEnter option: " << endl;
+        cout << "1. Insert \n2. Search \n3. Preorder Traversal \n4. Inorder Traversal \n5. Postorder Traversal \n6. Height \n7. Level Order \n8. Exit \nEnter option: " << endl;
         cin >> option;
 
         switch(option){
@@ -113,7 +128,10 @@ int main(){
             case 6: cout << "Height of the BST is: " << findHeight(root);
                     break;
 
-            case 7: exit(0);
+            case 7: levelOrder(root);
+                    break;
+
+            case 8: exit(0);
         }
     }while(1);
     return 0;
