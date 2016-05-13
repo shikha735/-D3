@@ -152,6 +152,76 @@ int findHeight(BstNode* root){
     return max(findHeight(root->left),findHeight(root->right)) + 1;
 }
 
+// finding min element
+BstNode* findMin(BstNode* root){
+    while(root->left != NULL) root = root->left;
+    return root;
+}
+
+// Deleting a node from BST
+BstNode* deleteNode(BstNode* root, int val){
+    if(root == NULL) return root;
+    else if(val < root->data) root->left = deleteNode(root->left, val);
+    else if (val > root->data) root->right = deleteNode(root->right, val);
+    else{
+        // No child
+        if(root->left == NULL && root->right == NULL){
+            delete root;
+            root = NULL;
+        }
+        // one child
+        else if(root->left == NULL){
+            BstNode* temp = root;
+            root = root->right;
+            delete temp;
+        }
+        else if(root->right == NULL){
+            BstNode* temp = root;
+            root = root->left;
+            delete temp;
+        }
+        // two children
+        else{
+            BstNode* temp = findMin(root->right);
+            root->data = temp->data;
+            root->right = deleteNode(root->right, root->data);
+        }
+    }
+    return root;
+}
+
+BstNode* Find(BstNode* root,int val){
+    if(root == NULL) return NULL;
+    else if(val == root->data) return root;
+    else if(val < root->data) return Find(root->left, val);
+    else return Find(root->right, val);
+}
+
+// finding In order successor
+BstNode* getSuccessoor(BstNode* root, int data){
+    BstNode* current = Find(root, data);
+    if(current == NULL) return NULL;
+
+    // if it has right subtree
+    if(current->right != NULL){
+        return findMin(current->right);
+    }
+    // if it does not have right subtree
+    else{
+        BstNode* successor = NULL;
+        BstNode* ancestor = root;
+        while(ancestor != current){
+            if(current->data < ancestor->data){
+                successor = ancestor;
+                ancestor = ancestor->left;
+            }
+            else
+                ancestor = ancestor->right;
+        }
+        return successor;
+    }
+}
+
 int main(){
     BstNode* root = NULL;
     int val, option;
@@ -159,7 +229,7 @@ int main(){
     do{
         cout << "\nMenu:" << endl;
         cout << "1. Insert \n2. Search \n3. Preorder Traversal \n4. Inorder Traversal \n5. Postorder Traversal \n6. Height \n7. Level Order \n8. Exit ";
-		cout << "\n*** Without recursion *** \n9. Preorder \n10. Inorder \n11. Postorder \nEnter option: " << endl;
+		cout << "\n*** Without recursion *** \n9. Preorder \n10. Inorder \n11. Postorder \n12. Delete \n13. Inorder Successor \nEnter option: " << endl;
         cin >> option;
 
         switch(option){
@@ -201,6 +271,18 @@ int main(){
                      break;
 
             case 11: postorder(root);
+                     break;
+
+            case 12: cout << "Enter the value to be deleted: ";
+                     cin >> val;
+                     deleteNode(root, val);
+                     break;
+
+            case 13: cout << "Enter the value for which you want to find inorder successor: ";
+                     cin >> val;
+                     BstNode* successor = getSuccessoor(root, val);
+                     if(successor != NULL) cout << successor->data;
+                     else cout << "Does not exists";
                      break;
         }
     }while(1);
