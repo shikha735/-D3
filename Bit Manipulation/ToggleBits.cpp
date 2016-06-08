@@ -11,7 +11,7 @@ int toggleBits(int n){
             solution |= nextSetBit;
         }
         nextSetBit <<= 1;
-        n = unsigned(n) >> 1;
+        n = unsigned(n) >> 1; // ensures that the algo works for -ve no.s also
     }
     return solution;
 }
