@@ -2,6 +2,7 @@
 #include <iostream>
 #include <climits>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 // Brute force approach - O(n^3)
@@ -41,15 +42,50 @@ int mSSA(vector<int> A){
 	return ans;
 }
 
+// Divide and Conquer; Using recursion - O(nlogn)
+int mSSADivideNConquer(int A[], int n){
+    if(n == 1){
+        return A[0];
+    }
+    int m = n/2;
+    int leftSum = INT_MIN, rightSum = INT_MIN, sum = 0, ans;
+    int leftMSS = mSSADivideNConquer(A,m);
+    int rightMSS = mSSADivideNConquer(A+m,n-m);
+    for(int i=m;i<n;i++){
+        sum += A[i];
+        rightSum = max(sum,rightSum);
+    }
+    sum = 0;
+    for(int i=m-1;i>=0;i--){
+        sum += A[i];
+        leftSum = max(sum,leftSum);
+    }
+    ans = max(leftMSS,rightMSS);
+    return max(ans,leftSum+rightSum);
+}
+
+// Kadane's algorithm - with variation for array with all elements -ve - O(n)
+int mSSAKadane(vector<int> A){
+    int ans = A[0], sum = A[0];
+    for(int i=1;i<A.size();i++){
+        sum = max(A[i],sum+A[i]);
+        ans = max(ans,sum);
+    }
+    return ans;
+}
+
 int main(){
     int N, inp;
     vector<int> A;
     cout << "Enter size of the array";
     cin >> N;
+    int B[N];
     for(int i=0;i<N;i++){
         cin >> inp;
         A.push_back(inp);
+        B[i] = inp;
     }
-    cout << mSSA(A);
+    // cout << mSSADivideNConquer(B,N);
+    cout << mSSAKadane(A);
     return 0;
 }
